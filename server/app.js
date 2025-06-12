@@ -19,22 +19,21 @@ const connectionUrl = "mongodb+srv://shashiyadav17900:d1r6ygNnZaddSyQx@chatapp.t
 const httpServer = createServer(app);
 
 // ✅ Allowed frontend origins
-const allowedOrigins = [
-    "https://chat-app-pearl-beta-68.vercel.app", // ✅ Vercel frontend
-    "http://localhost:3000" // ✅ Local development
-];
-
-// ✅ Stable CORS config (Fix applied)
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS: " + origin));
-        }
-    },
-    credentials: true,
+  origin: "https://chat-app-pearl-beta-68.vercel.app", // Replace with your frontend URL
+  credentials: true,
+  methods: "GET, POST, PUT, PATCH, DELETE",
+  allowedHeaders: "Content-Type, Authorization"
 }));
+
+// ✅ Handle Preflight Requests (OPTIONS method)
+app.options("*", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "https://chat-app-pearl-beta-68.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(204);
+});
 
 
 // Body parser
