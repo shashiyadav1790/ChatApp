@@ -26,9 +26,16 @@ const allowedOrigins = [
 
 // ✅ Stable CORS config (Fix applied)
 app.use(cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS: " + origin));
+        }
+    },
     credentials: true,
 }));
+
 
 // Body parser
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
