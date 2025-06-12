@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
-import OurRouter from './routes/Route.js'
+import OurRouter from './routes/Route.js';
 import cors from "cors";
 import dotenv from 'dotenv';
 import { createServer } from "http";
@@ -18,25 +18,20 @@ const connectionUrl = "mongodb+srv://shashiyadav17900:d1r6ygNnZaddSyQx@chatapp.t
 // Create HTTP server
 const httpServer = createServer(app);
 
-// ✅ Allow correct frontend domain here
+// ✅ Allowed frontend origins
 const allowedOrigins = [
-    "https://chat-app-pearl-beta-68.vercel.app", // Vercel frontend
-    "http://localhost:3000" // Local dev (optional)
+    "https://chat-app-pearl-beta-68.vercel.app", // ✅ Vercel frontend
+    "http://localhost:3000" // ✅ Local development
 ];
 
-// Express CORS middleware
+// ✅ Stable CORS config (Fix applied)
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            return callback(null, true);
-        }
-        return callback(new Error("Not allowed by CORS"));
-    },
+    origin: allowedOrigins,
     credentials: true,
 }));
 
 // Body parser
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }))
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 
 // Connect to MongoDB
@@ -44,7 +39,7 @@ mongoose.connect(connectionUrl, { useNewUrlParser: true, useUnifiedTopology: tru
     .then(() => console.log("✅ Database connected successfully"))
     .catch((err) => console.log("❌ Error connecting DB: " + err.message));
 
-// Socket.IO setup with proper CORS
+// Socket.IO setup with CORS
 export const io = new Server(httpServer, {
     cors: {
         origin: allowedOrigins,
