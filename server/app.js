@@ -20,7 +20,7 @@ const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
     cors: {
-        origin: "*",
+        origin: "https://chatapp-vxb8.onrender.com",
         methods: ["GET", "POST"],
     }
 });
